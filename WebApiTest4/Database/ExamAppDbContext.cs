@@ -38,7 +38,7 @@ namespace WebApiTest4.Models.ExamsModels
     {
         public override void InitializeDatabase(ExamAppDbContext db)
         {
-
+            base.InitializeDatabase(db);
             db.Database.CreateIfNotExists();
             InitExams(db);
 

@@ -41,12 +41,12 @@ namespace WebApiTest4.Controllers
             return NotFound();
         }
 
-        ////GET: api/Tasks?
-        //[Route("api/v1/Tasks")]
-        //public IEnumerable<ExamTaskViewModel> Get([FromUri]int? offset, [FromUri]int? limit)
-        //{
-        //    return _taskService.GetSortedTasks(null, offset ?? 0, limit ?? defaultLimit, User.Identity.GetUserId<int>());
-        //}
+        //GET: api/Tasks?
+        [Route("api/v1/Tasks")]
+        public IEnumerable<ExamTaskViewModel> Get([FromUri]int? offset, [FromUri]int? limit)
+        {
+            return _taskService.GetSortedTasks(null, offset ?? 0, limit ?? defaultLimit, User.Identity.GetUserId<int>());
+        }
 
         //GET: api/Tasks?
         [Route("api/v1/Tasks")]
@@ -66,8 +66,8 @@ namespace WebApiTest4.Controllers
         [HttpPost]
         [Authorize]
         [ClaimsAuthorize(ClaimTypes.Role, "student")]
-        [Route("api/v1/Tasks/PostCheck")]
-        public IHttpActionResult PostCheck(TaskAnswersSetBindingModel answers)
+        [Route("api/v1/Tasks/Check")]
+        public IHttpActionResult Check(TaskAnswersSetBindingModel answers)
         {
             if (answers.list.Any() && ModelState.IsValid)
             {
@@ -86,8 +86,8 @@ namespace WebApiTest4.Controllers
         [HttpGet]
         [ActionName("Train")]
         [ClaimsAuthorize(ClaimTypes.Role, "student")]
-        [Route("api/v1/Tasks/GetTrain")]
-        public IEnumerable<ExamTaskViewModel> GetTrain()
+        [Route("api/v1/Tasks/Train")]
+        public IEnumerable<ExamTaskViewModel> Train()
         {
            return _taskService.GenerateNewExamTrain(User
                 .Identity

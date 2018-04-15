@@ -44,7 +44,14 @@ namespace WebApiTest4.Controllers
         {
             get
             {
-                return _uploadConfig.Root.Descendants("uploadsStoragePath").FirstOrDefault().Value;
+                var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\"); //_uploadConfig.Root.Descendants("uploadsStoragePath").FirstOrDefault().Value;
+
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                return path;
                 //return _uploadConfig.DocumentElement.SelectSingleNode("uploadsStoragePath").Value; 
             }
         }

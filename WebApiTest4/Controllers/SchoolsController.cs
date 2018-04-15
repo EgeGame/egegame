@@ -19,6 +19,7 @@ namespace WebApiTest4.Controllers
         }
         // GET: api/Schools
         [HttpGet]
+        [Route("api/v1/Schools")]
         public IEnumerable<SchoolViewModel> Get()
         {
             return _schoolService.GetSchools();
@@ -26,7 +27,7 @@ namespace WebApiTest4.Controllers
 
         // GET: api/Schools/5
         [HttpGet]
-        [Route("api/v1/Scools/{id}")]
+        [Route("api/v1/Schools/{id}")]
         public IHttpActionResult Get(int id)
         {
             if (_schoolService.SchoolExists(id))

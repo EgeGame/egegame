@@ -46,6 +46,24 @@ namespace WebApiTest4.Controllers
             return _userService.GetTeachers();
         }
 
+        // GET: api/Teachers
+        [Route("api/v1/Teachers")]
+        public IEnumerable<TeacherViewModel> Get([FromUri]int limit, [FromUri]int offset)
+        {
+            return _userService.GetTeachers().Skip(offset).Take(limit);
+        }
+
+        // GET: api/Teachers
+        [Route("api/v1/Teachers")]
+        public IEnumerable<TeacherViewModel> Get([FromUri]int schoolId, [FromUri]int limit, [FromUri]int offset)
+        {
+            return _userService
+                .GetTeachers()
+                .Where(x => x.school_id == schoolId)
+                .Skip(offset)
+                .Take(limit);
+        }
+
         // GET: api/v1/Teachers/5
         [HttpGet]
         [Route("api/v1/Teachers/{id}")]
@@ -61,7 +79,8 @@ namespace WebApiTest4.Controllers
             }
         }
         [ClaimsAuthorize(ClaimTypes.Role, "student")]
-        public IHttpActionResult PostBecome([FromBody] string key)
+        [Route("api/v1/Teachers/Become")]
+        public IHttpActionResult Become([FromBody] string key)
         {
             var rm = new ResourceManager("WebApiTest4.Controllers.SecretTeacherKey", Assembly.GetExecutingAssembly());
             if (rm.GetString("key").Equals(key))

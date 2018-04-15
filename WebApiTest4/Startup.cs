@@ -28,7 +28,10 @@ namespace WebApiTest4
 
         private HttpConfiguration ConfigureWebApi(IAppBuilder app)
         {
-            var config = new HttpConfiguration();
+            var config = new HttpConfiguration
+            {
+                IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always
+            };
 
             SwaggerConfig.Register(config);
 

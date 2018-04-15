@@ -131,6 +131,7 @@ namespace WebApiTest4.Services.Impls
         private const string AllTasksFromTopic = "ALL_TASKS_FROM_TOPIC_";
         private const string GotCountOfTasks = "GOT_COUNT_OF_TASKS_";
         private const string GoodExamPoints = "GOOD_EXAM_POINTS";
+        private const string FirstTaskFromTopic = "FIRST_TYPE_FROM_TOPIC_";
         private const int GoodPointsBorder = 56;
         private static readonly int[] Counts = new[] {10, 50, 100, 500};
 
@@ -162,6 +163,18 @@ namespace WebApiTest4.Services.Impls
                                 {
                                     Description = AllTasksFromTopic + topic.Id,
                                     ImageSrc = ImagesStoragePrefix + AllTasksFromTopic + ".png"
+                                });
+                            }
+                        }
+
+                        if(!user.Badges.Any(b => b.Description.Equals(FirstTaskFromTopic + topic.Id)))
+                        {
+                            if(topic.ExamTasks.Count > 0)
+                            {
+                                user.Badges.Add(new Badge()
+                                {
+                                    Description = FirstTaskFromTopic + topic.Id,
+                                    ImageSrc = ImagesStoragePrefix + FirstTaskFromTopic + ".png"
                                 });
                             }
                         }

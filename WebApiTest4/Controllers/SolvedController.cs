@@ -45,7 +45,7 @@ namespace WebApiTest4.Controllers
 
             if (offset >= 0 && limit >= 0)
             {
-                return Ok();
+                return Ok(_solvedTasksService.GetUncheckedAttemptsByTopic(topic_id, User.Identity.GetUserId<int>(), offset, limit));
             }
             else
             {
@@ -60,7 +60,7 @@ namespace WebApiTest4.Controllers
 
             if (offset >= 0 && limit >= 0)
             {
-                return Ok();
+                return Ok(_solvedTasksService.GetUncheckedAttemptsByType(type, User.Identity.GetUserId<int>(), offset, limit ?? 0));
             }
             else
             {
@@ -76,7 +76,7 @@ namespace WebApiTest4.Controllers
 
             if (offset >= 0 && limit >= 0)
             {
-                return Ok();
+                return Ok(_solvedTasksService.GetUncheckedAttemptsByStudent(student_id, User.Identity.GetUserId<int>(), offset, limit));
             }
             else
             {

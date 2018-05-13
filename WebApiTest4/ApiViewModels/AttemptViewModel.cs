@@ -13,6 +13,7 @@ namespace WebApiTest4.ApiViewModels
             attempt_id = attempt.Id;
             right_answer = attempt.ExamTask.Answer;
             student_id = attempt.Train.User.Id;
+            student_name = attempt.Train.User.Name;
             student_answer = new StudentAnswer()
             {
                 text = attempt.UserAnswer,
@@ -22,6 +23,7 @@ namespace WebApiTest4.ApiViewModels
         }
         public int attempt_id { get; set; }
         public int student_id { get; set; }
+        public string student_name { get; set; }
         public string right_answer { get; private set; }
         public StudentAnswer student_answer { get; set; }
     }

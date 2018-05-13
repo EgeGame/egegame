@@ -41,6 +41,76 @@ namespace WebApiTest4.Services.Impls
             return null;
         }
 
+        public IEnumerable<AttemptViewModel> GetUncheckedAttemptsByTopic(int topic_id, int teacher_id, int offset, int limit)
+        {
+            var teacher = _context.Users.OfRole("teacher").FirstOrDefault(x => x.Id == teacher_id);
+            if (teacher != null)
+            {
+                return
+                    teacher.Students.SelectMany(
+                            student =>
+                                student.Trains.SelectMany(
+                                    train =>
+                                        train.TaskAttempts.OfType<UserManualCheckingTaskAttempt>()
+                                            .Where(x => x.ExamTask.TaskTopic.Id == topic_id)
+                                            .Where(attempt => !attempt.IsChecked && attempt.UserAnswer != null)))
+                        .OrderByDescending(attempt => attempt.Train.FinishTime)
+                        .Skip(offset)
+                        .Take(limit)
+                        .ToList()
+                        .Select(attempt => new AttemptViewModel(attempt));
+            }
+            return null;
+        }
+
+        public IEnumerable<AttemptViewModel> GetUncheckedAttemptsByType(int type, int teacher_id, int offset, int limit)
+        {
+            var isShort = type == 0;
+
+            var teacher = _context.Users.OfRole("teacher").FirstOrDefault(x => x.Id == teacher_id);
+            if (teacher != null)
+            {
+                return
+                    teacher.Students.SelectMany(
+                            student =>
+                                student.Trains.SelectMany(
+                                    train =>
+                                        train.TaskAttempts.OfType<UserManualCheckingTaskAttempt>()
+                                            .Where(x => x.ExamTask.TaskTopic.IsShort == isShort)
+                                            .Where(attempt => !attempt.IsChecked && attempt.UserAnswer != null)))
+                        .OrderByDescending(attempt => attempt.Train.FinishTime)
+                        .Skip(offset)
+                        .Take(limit)
+                        .ToList()
+                        .Select(attempt => new AttemptViewModel(attempt));
+            }
+            return null;
+        }
+
+        public IEnumerable<AttemptViewModel> GetUncheckedAttemptsByStudent(int student_id, int teacher_id, int offset, int limit)
+        {
+            var teacher = _context.Users.OfRole("teacher").FirstOrDefault(x => x.Id == teacher_id);
+            if (teacher != null)
+            {
+                return
+                    teacher.Students
+                    .Where(x => x.Id == student_id)
+                    .SelectMany(
+                            student =>
+                                student.Trains.SelectMany(
+                                    train =>
+                                        train.TaskAttempts.OfType<UserManualCheckingTaskAttempt>()
+                                            .Where(attempt => !attempt.IsChecked && attempt.UserAnswer != null)))
+                        .OrderByDescending(attempt => attempt.Train.FinishTime)
+                        .Skip(offset)
+                        .Take(limit)
+                        .ToList()
+                        .Select(attempt => new AttemptViewModel(attempt));
+            }
+            return null;
+        }
+
+
         public void CheckAttemptsByTeacher(int teacherId, IEnumerable<CheckedAttemptBindigModel> checkedAttempts)
         {
             User teacher = _context.Users.FirstOrDefault(x => x.Id == teacherId);

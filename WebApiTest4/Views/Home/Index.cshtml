@@ -7,8 +7,8 @@
         <option value="post">POST</option>
         <option value="put">PUT</option>
     </select>
-    @*<input type="button" value="Try it" onclick="sendRequest()" />
-    <span id='value1'>(Result)</span>*@
+    <input type="button" value="Try it" onclick="sendRequest()" />
+    <span id='value1'>(Result)</span>
 </div>
 
 @section scripts {
@@ -20,13 +20,22 @@
             var method = $('#method').val();
 
             $.ajax({
-                type: method,
-                url: serviceUrl
-            }).done(function (data) {
-                $('#value1').text(data);
-            }).error(function (jqXHR, textStatus, errorThrown) {
-                $('#value1').text(jqXHR.responseText || textStatus);
+                url: "http://ege-game.somee.com/api/v1/solved/GetByTopic?topic_id=10&offset=0&limit=10",
+                data: {},
+                type: "GET",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer _lHLcibNRdTFUSulZpMMYRthOWdVp3FGBU9vtFFHx5NKEEVSZBpoQFaibVIGfIJFc0QASopBXnPIpm39Lt30Wsk8aez-ebl_ZEQ4WuEfvH-lYB8gbPTey2y0CC4jquSryUpRmjYz-CXwa-tKxsTDsQAjpxkHk_IARtW3rXswTpft7fzCWa49TCPSEmAO-RsUhL4sh--_9eUnQuxnHyoLHBaFxZO1f0L3Sh9SBKR43p9WrCIrYgdWHJN3OxqaBVOMfUMk9aNKaba-VOeM4I-KJ3WvPBvstyoYHJzwcdNQ_y65o0HFlL8aoP4_eLce4iTUHiGUjWq4I_TlJuwA6a0NF9kP-d9BvhV5NCc9z8pfUVvgWNx8igA8FN8IKtQvBVUnDeBAuZ0tEaqWqtbL-D82nT6y7yojIelWnPRmHwZzrHmm_cXdteOBskIS00ooAq0yemwJSKqDcckO-ZlsOtZm0-7mhAOmFumPhsmBHnnLL_g');
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                },
+                success: function () { alert('Success!' + authHeader); }
             });
+
+            //$.ajax({
+            //    url: serviceUrl,
+            //    data: {},
+            //    type: method,
+            //    success: function () { alert('Success!' + authHeader); }
+            //});
         }
     </script>
 }

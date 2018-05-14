@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -383,6 +384,7 @@ namespace WebApiTest4.Controllers
         [Route("Edit")]
         public async Task<IHttpActionResult> Edit([FromBody]EditingBindingModel model)
         {
+            var dbContext = Request.GetOwinContext().Get<ExamAppDbContext>();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -394,15 +396,15 @@ namespace WebApiTest4.Controllers
             user.Name = model.Name ?? user.Name;
             user.UserName = model.UserName ?? user.UserName;
             user.Email = model.Email ?? user.Email;
+
             if (model.school_id != null)
             {
-                user.School = _schoolService.GetSchoolById(model.school_id.Value) ?? user.School;
+                user.School = dbContext.Schools.FirstOrDefault(x => x.Id == model.school_id.Value) ?? user.School;
             }
-            if (model.teacher_id!= null)
+
+            if (model.teacher_id != null)
             {
-                //check requested user is teacher
-                User teacher = UserManager.FindById(model.teacher_id.Value);
-                user.Teacher = teacher != null ? UserManager.IsInRole(teacher.Id, "teacher") ? teacher : user.Teacher : user.Teacher;
+                user.Teacher = dbContext.Users.OfRole("teacher").FirstOrDefault(x => x.Id == model.teacher_id.Value) ?? user.Teacher;
             }
 
 

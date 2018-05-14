@@ -100,30 +100,33 @@ namespace WebApiTest4.Services.Impls
             {
                 query = query.Where(x => x.TaskTopic.Id == topicId);
             }
-            //var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
+
             var user = _dbContext.Users.OfRole("student").FirstOrDefault(x => x.Id == userId);
             if (user != null)
             {
-                if (user.Trains.OfType<FreeTrain>().Any())
+                var pagedQuery = query
+                    .Select(ExamTaskViewModel.ProjectionExpression)
+                    .OrderBy(x => x.id)
+                    .Skip(offset)
+                    .Take(limit);
+
+                var trains = user.Trains.OfType<FreeTrain>()
+                    .SelectMany(train => train.TaskAttempts)
+                    .Where(x => pagedQuery.Any(y => y.id == x.ExamTask.Id))
+                    .GroupBy(x => x.ExamTask.Id)
+                    .ToDictionary(x => x.Key, x => x.Max(y => y.Points));
+
+                var pagedData = pagedQuery.ToList();
+
+                foreach(var item in pagedData)
                 {
-                    return query.ToList().Join(
-                            user.Trains.OfType<FreeTrain>()
-                                .SelectMany(train => train.TaskAttempts)
-                                .GroupBy(ta => ta.ExamTask)
-                                .Select(g => new {taskId = g.Key.Id, userPoint = g.Max(ta => ta.Points)}),
-                            task => task.Id,
-                            res => res.taskId, (task, res) => new {Task = task, UserPoints = res.userPoint})
-                        .OrderBy(x => x.Task.Id)
-                        .Skip(offset)
-                        .Take(limit)
-                        .ToList()
-                        .Select(x => new ExamTaskViewModel(x.Task, x.UserPoints));
+                    if (trains.ContainsKey(item.id))
+                    {
+                        item.user_points = trains[item.id];
+                    }
                 }
 
-                return query.OrderBy(x => x.Id).Skip(offset)
-                    .Take(limit)
-                    .ToList()
-                    .Select(x => new ExamTaskViewModel(x, 0));
+                return pagedData;
             }
 
             return query //if there is no topic then just first tasks
@@ -354,29 +357,33 @@ namespace WebApiTest4.Services.Impls
             var query = _dbContext
                 .Tasks
                 .Where(x => x.TaskTopic.IsShort == isShortType);
+
             var user = _dbContext.Users.OfRole("student").FirstOrDefault(x => x.Id == userId);
             if (user != null)
             {
-                if (user.Trains.OfType<FreeTrain>().Any())
+                var pagedQuery = query
+                    .Select(ExamTaskViewModel.ProjectionExpression)
+                    .OrderBy(x => x.id)
+                    .Skip(offset)
+                    .Take(limit);
+
+                var trains = user.Trains.OfType<FreeTrain>()
+                    .SelectMany(train => train.TaskAttempts)
+                    .Where(x => pagedQuery.Any(y => y.id == x.ExamTask.Id))
+                    .GroupBy(x => x.ExamTask.Id)
+                    .ToDictionary(x => x.Key, x => x.Max(y => y.Points));
+
+                var pagedData = pagedQuery.ToList();
+
+                foreach (var item in pagedData)
                 {
-                    return query.Join(
-                            user.Trains.OfType<FreeTrain>()
-                                .SelectMany(train => train.TaskAttempts)
-                                .GroupBy(ta => ta.ExamTask)
-                                .Select(g => new {taskId = g.Key.Id, userPoint = g.Max(ta => ta.Points)}),
-                            task => task.Id,
-                            res => res.taskId, (task, res) => new {Task = task, UserPoints = res.userPoint})
-                        .OrderBy(x => x.Task.Id)
-                        .Skip(offset)
-                        .Take(limit)
-                        .ToList()
-                        .Select(x => new ExamTaskViewModel(x.Task, x.UserPoints));
+                    if (trains.ContainsKey(item.id))
+                    {
+                        item.user_points = trains[item.id];
+                    }
                 }
 
-                return query.OrderBy(x => x.Id).Skip(offset)
-                    .Take(limit)
-                    .ToList()
-                    .Select(x => new ExamTaskViewModel(x, 0));
+                return pagedData;
             }
 
             return

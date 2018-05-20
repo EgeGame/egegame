@@ -25,11 +25,11 @@ namespace WebApiTest4.Controllers
 
         [HttpGet]
         [Route("api/v1/Solved/GetForMy")]
-        public IHttpActionResult GetForMy([FromUri]int offset, [FromUri]int limit)
+        public IHttpActionResult GetForMy([FromUri]int offset, [FromUri]int limit, [FromUri] bool? is_checked = null)
         {
             if (offset >= 0 && limit >= 0)
             {
-                return Ok(_solvedTasksService.GetUncheckedAttemptsOfMyStudents(User.Identity.GetUserId<int>(), offset, limit));
+                return Ok(_solvedTasksService.GetUncheckedAttemptsOfMyStudents(User.Identity.GetUserId<int>(), is_checked, offset, limit));
             }
             else
             {
@@ -40,12 +40,12 @@ namespace WebApiTest4.Controllers
 
         [HttpGet]
         [Route("api/v1/Solved/GetByTopic")]
-        public IHttpActionResult GetByTopic([FromUri]int topic_id, [FromUri]int offset, [FromUri]int limit)
+        public IHttpActionResult GetByTopic([FromUri]int topic_id, [FromUri]int offset, [FromUri]int limit, [FromUri] bool? only_unchecked = null)
         {
 
             if (offset >= 0 && limit >= 0)
             {
-                return Ok(_solvedTasksService.GetUncheckedAttemptsByTopic(topic_id, User.Identity.GetUserId<int>(), offset, limit));
+                return Ok(_solvedTasksService.GetUncheckedAttemptsByTopic(topic_id, only_unchecked, User.Identity.GetUserId<int>(), offset, limit));
             }
             else
             {
@@ -55,12 +55,12 @@ namespace WebApiTest4.Controllers
 
         [HttpGet]
         [Route("api/v1/Solved/GetByType")]
-        public IHttpActionResult GetByType([FromUri]int type, [FromUri]int offset, [FromUri]int? limit)
+        public IHttpActionResult GetByType([FromUri]int type, [FromUri]int offset, [FromUri]int? limit, [FromUri] bool? only_unchecked = null)
         {
 
             if (offset >= 0 && limit >= 0)
             {
-                return Ok(_solvedTasksService.GetUncheckedAttemptsByType(type, User.Identity.GetUserId<int>(), offset, limit ?? 0));
+                return Ok(_solvedTasksService.GetUncheckedAttemptsByType(type, only_unchecked, User.Identity.GetUserId<int>(), offset, limit ?? 0));
             }
             else
             {
@@ -71,12 +71,12 @@ namespace WebApiTest4.Controllers
 
         [HttpGet]
         [Route("api/v1/Solved/GetByStudent")]
-        public IHttpActionResult GetByStudent([FromUri]int student_id, [FromUri]int offset, [FromUri]int limit)
+        public IHttpActionResult GetByStudent([FromUri]int student_id, [FromUri]int offset, [FromUri]int limit, [FromUri] bool? only_unchecked = null)
         {
 
             if (offset >= 0 && limit >= 0)
             {
-                return Ok(_solvedTasksService.GetUncheckedAttemptsByStudent(student_id, User.Identity.GetUserId<int>(), offset, limit));
+                return Ok(_solvedTasksService.GetUncheckedAttemptsByStudent(student_id, only_unchecked, User.Identity.GetUserId<int>(), offset, limit));
             }
             else
             {

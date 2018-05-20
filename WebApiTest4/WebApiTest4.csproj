@@ -293,6 +293,8 @@
     <Compile Include="ApiViewModels\ExamTaskViewModel.cs" />
     <Compile Include="ApiViewModels\BindingModels\TaskAnswerBindingModel.cs" />
     <Compile Include="ApiViewModels\UserViewModel.cs" />
+    <Compile Include="Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Extensions\IQueryableExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

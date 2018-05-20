@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using WebApiTest4.ApiViewModels;
 using WebApiTest4.ApiViewModels.BindingModels;
+using WebApiTest4.Extensions;
 using WebApiTest4.Models.ExamsModels;
 using WebGrease.Css.Extensions;
 
@@ -20,7 +21,7 @@ namespace WebApiTest4.Services.Impls
             _context = context;
         }
 
-        public IEnumerable<AttemptViewModel> GetUncheckedAttemptsOfMyStudents(int teacher_id, int offset, int limit)
+        public IEnumerable<AttemptViewModel> GetUncheckedAttemptsOfMyStudents(int teacher_id, bool? is_checked, int offset, int limit)
         {
             var teacher = _context.Users.OfRole("teacher").FirstOrDefault(x => x.Id == teacher_id);
             if (teacher != null)
@@ -31,7 +32,8 @@ namespace WebApiTest4.Services.Impls
                                 student.Trains.SelectMany(
                                     train =>
                                         train.TaskAttempts.OfType<UserManualCheckingTaskAttempt>()
-                                            .Where(attempt => !attempt.IsChecked && attempt.UserAnswer != null)))
+                                            .Where(attempt => attempt.UserAnswer != null)
+                                            .WhereIf(is_checked.HasValue, x => x.IsChecked == is_checked)))
                         .OrderByDescending(attempt => attempt.Train.FinishTime)
                         .Skip(offset)
                         .Take(limit)
@@ -41,7 +43,7 @@ namespace WebApiTest4.Services.Impls
             return null;
         }
 
-        public IEnumerable<AttemptViewModel> GetUncheckedAttemptsByTopic(int topic_id, int teacher_id, int offset, int limit)
+        public IEnumerable<AttemptViewModel> GetUncheckedAttemptsByTopic(int topic_id, bool? is_checked, int teacher_id, int offset, int limit)
         {
             var teacher = _context.Users.OfRole("teacher").FirstOrDefault(x => x.Id == teacher_id);
             if (teacher != null)
@@ -53,7 +55,8 @@ namespace WebApiTest4.Services.Impls
                                     train =>
                                         train.TaskAttempts.OfType<UserManualCheckingTaskAttempt>()
                                             .Where(x => x.ExamTask.TaskTopic.Id == topic_id)
-                                            .Where(attempt => !attempt.IsChecked && attempt.UserAnswer != null)))
+                                            .Where(attempt => attempt.UserAnswer != null)
+                                            .WhereIf(is_checked.HasValue, x => x.IsChecked == is_checked)))
                         .OrderByDescending(attempt => attempt.Train.FinishTime)
                         .Skip(offset)
                         .Take(limit)
@@ -63,7 +66,7 @@ namespace WebApiTest4.Services.Impls
             return null;
         }
 
-        public IEnumerable<AttemptViewModel> GetUncheckedAttemptsByType(int type, int teacher_id, int offset, int limit)
+        public IEnumerable<AttemptViewModel> GetUncheckedAttemptsByType(int type, bool? is_checked, int teacher_id, int offset, int limit)
         {
             var isShort = type == 0;
 
@@ -77,7 +80,8 @@ namespace WebApiTest4.Services.Impls
                                     train =>
                                         train.TaskAttempts.OfType<UserManualCheckingTaskAttempt>()
                                             .Where(x => x.ExamTask.TaskTopic.IsShort == isShort)
-                                            .Where(attempt => !attempt.IsChecked && attempt.UserAnswer != null)))
+                                            .Where(attempt => attempt.UserAnswer != null)
+                                            .WhereIf(is_checked.HasValue, x => x.IsChecked == is_checked)))
                         .OrderByDescending(attempt => attempt.Train.FinishTime)
                         .Skip(offset)
                         .Take(limit)
@@ -87,7 +91,7 @@ namespace WebApiTest4.Services.Impls
             return null;
         }
 
-        public IEnumerable<AttemptViewModel> GetUncheckedAttemptsByStudent(int student_id, int teacher_id, int offset, int limit)
+        public IEnumerable<AttemptViewModel> GetUncheckedAttemptsByStudent(int student_id, bool? is_checked, int teacher_id, int offset, int limit)
         {
             var teacher = _context.Users.OfRole("teacher").FirstOrDefault(x => x.Id == teacher_id);
             if (teacher != null)
@@ -100,7 +104,8 @@ namespace WebApiTest4.Services.Impls
                                 student.Trains.SelectMany(
                                     train =>
                                         train.TaskAttempts.OfType<UserManualCheckingTaskAttempt>()
-                                            .Where(attempt => !attempt.IsChecked && attempt.UserAnswer != null)))
+                                            .Where(attempt => attempt.UserAnswer != null)
+                                            .WhereIf(is_checked.HasValue, x => x.IsChecked == is_checked)))
                         .OrderByDescending(attempt => attempt.Train.FinishTime)
                         .Skip(offset)
                         .Take(limit)

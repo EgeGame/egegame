@@ -13,6 +13,7 @@ namespace WebApiTest4.ApiViewModels
             id = sourseTask.Id;
             text = sourseTask.Text;
             topic_id = sourseTask.TaskTopic.Id;
+            topic_name = sourseTask.TaskTopic.Name;
             type = sourseTask.TaskTopic.IsShort ? 0 : 1;
             code = sourseTask.TaskTopic.Code;
             max_points = sourseTask.TaskTopic.PointsPerTask;
@@ -26,12 +27,14 @@ namespace WebApiTest4.ApiViewModels
                 text = x.Text,
 
                 topic_id = x.TaskTopic.Id,
+                topic_name = x.TaskTopic.Name,
                 code = x.TaskTopic.Code,
                 type = x.TaskTopic.IsShort ? 0 : 1,
                 max_points = x.TaskTopic.PointsPerTask
             };
 
         public int topic_id { get; set; }
+        public string topic_name { get; set; }
         public int type { get; set; }
         public int id { get; set; }
         public string text { get; set; }

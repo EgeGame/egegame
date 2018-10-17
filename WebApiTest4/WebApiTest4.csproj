@@ -285,6 +285,7 @@
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="Controllers\ThemesController.cs" />
+    <Compile Include="Controllers\TrainsController.cs" />
     <Compile Include="Controllers\UploadsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -315,6 +316,7 @@
     <Compile Include="Models\ExamsModels\User.cs" />
     <Compile Include="Models\ExamsModels\UserTaskAttempt.cs" />
     <Compile Include="Models\IdentityModules.cs" />
+    <Compile Include="Models\TrainViewModel.cs" />
     <Compile Include="Parsing\Scanner.cs" />
     <Compile Include="Parsing\Topics.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -329,13 +331,16 @@
     <Compile Include="Services\Impls\SolvedTasksServiceImpl.cs" />
     <Compile Include="Services\Impls\TaskServiceImpl.cs" />
     <Compile Include="Services\Impls\TopicServiceImpl.cs" />
+    <Compile Include="Services\Impls\TrainsService.cs" />
     <Compile Include="Services\Impls\UserServiceImpl.cs" />
     <Compile Include="Services\ISchoolService.cs" />
     <Compile Include="Services\ISolvedTasksService.cs" />
     <Compile Include="Services\ITaskService.cs" />
     <Compile Include="Services\ITopicService.cs" />
+    <Compile Include="Services\ITrainsService.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="TrainStatus.cs" />
     <Compile Include="Utils\ClaimsAuthorizeAttribute.cs" />
     <Compile Include="Utils\Helpers.cs" />
     <Compile Include="Utils\Ninject\EgeNinjectModule.cs" />
@@ -390,6 +395,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="scripts\" />
+    <Folder Include="Views\Trains\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

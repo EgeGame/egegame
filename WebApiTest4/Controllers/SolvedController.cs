@@ -24,6 +24,13 @@ namespace WebApiTest4.Controllers
         }
 
         [HttpGet]
+        [Route("api/v1/Solved/GetTask")]
+        public IHttpActionResult GetTask(int taskId, int studentId)
+        {
+            return Ok(_solvedTasksService.GetTask(taskId, studentId));
+        }
+
+        [HttpGet]
         [Route("api/v1/Solved/GetForMy")]
         public IHttpActionResult GetForMy([FromUri]int offset, [FromUri]int limit, [FromUri] bool? is_checked = null)
         {

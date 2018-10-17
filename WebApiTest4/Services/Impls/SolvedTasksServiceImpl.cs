@@ -21,6 +21,26 @@ namespace WebApiTest4.Services.Impls
             _context = context;
         }
 
+        public AttemptViewModel GetTask(int taskId, int studentId)
+        {
+            var student = _context.Users.OfRole("student").FirstOrDefault(x => x.Id == studentId);
+            if (student != null)
+            {
+                var task = student.Trains
+                    .Select(train => train.TaskAttempts
+                                    .Where(x => x.ExamTask.Id == taskId)
+                                    .FirstOrDefault())
+                    .Where(x => x != null)
+                    .FirstOrDefault();
+
+                if(task != null)
+                {
+                    return new AttemptViewModel(task);
+                }
+            }
+            return null;
+        }
+
         public IEnumerable<AttemptViewModel> GetUncheckedAttemptsOfMyStudents(int teacher_id, bool? is_checked, int offset, int limit)
         {
             var teacher = _context.Users.OfRole("teacher").FirstOrDefault(x => x.Id == teacher_id);

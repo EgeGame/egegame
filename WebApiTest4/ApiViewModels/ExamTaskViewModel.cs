@@ -33,6 +33,19 @@ namespace WebApiTest4.ApiViewModels
                 max_points = x.TaskTopic.PointsPerTask
             };
 
+        public static Func<ExamTask, ExamTaskViewModel> ProjectionFunc =
+           x => new ExamTaskViewModel
+           {
+               id = x.Id,
+               text = x.Text,
+
+               topic_id = x.TaskTopic.Id,
+               topic_name = x.TaskTopic.Name,
+               code = x.TaskTopic.Code,
+               type = x.TaskTopic.IsShort ? 0 : 1,
+               max_points = x.TaskTopic.PointsPerTask
+           };
+
         public int topic_id { get; set; }
         public string topic_name { get; set; }
         public int type { get; set; }

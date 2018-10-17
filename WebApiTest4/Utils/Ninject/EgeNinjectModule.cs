@@ -15,6 +15,7 @@ namespace WebApiTest4.Utils.Ninject
         {
             var context = new ExamAppDbContext();
 
+            this.Bind<ITrainsService>().To<TrainsService>().WithConstructorArgument("context", context);
             this.Bind<ITaskService>().To<TaskServiceImpl>().WithConstructorArgument("context", context);
             this.Bind<IUserService>().To<UserServiceImpl>().WithConstructorArgument("context", context);
             this.Bind<ITopicService>().To<TopicServiceImpl>().WithConstructorArgument("context", context);
